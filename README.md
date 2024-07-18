@@ -10,4 +10,5 @@ Metacello new
    baseline: 'IngSoft2';
    githubUser: 'SantiagoPapa14' project: '2024-Papa' commitish: 'master' path: 'repository';
    load: 'development'.
+
 ```
