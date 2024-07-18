@@ -4,10 +4,6 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #tests }
-GameTest >> TestNewRepoWork [
-]
-
 { #category : #asserting }
 GameTest >> should: aErrorBlock raise: anErrorClass withMessage: anErrorMessage [
 	self should: aErrorBlock raise: anErrorClass withExceptionDo: [:error|self assert: error messageText equals:anErrorMessage].
