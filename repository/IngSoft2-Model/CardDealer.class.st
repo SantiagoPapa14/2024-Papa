@@ -9,5 +9,11 @@ Class {
 
 { #category : #application }
 CardDealer >> applyEffect: affectedPlayer [
-	affectedPlayer addCards: (Deck getRandomCards: 1).
+	| somePlayers |
+	reversed
+		ifTrue: [
+			somePlayers := players.
+			somePlayers remove: affectedPlayer ]
+		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer].
+	somePlayers do: [:aPlayer | aPlayer addCards: (Deck getRandomCards: 1)].
 ]
