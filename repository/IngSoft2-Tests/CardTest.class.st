@@ -10,7 +10,7 @@ CardTest >> test01PlayerCanUseInstantCardsAnytime [
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	
@@ -90,7 +90,7 @@ CardTest >> test03RepeatCardMovesTargetShipBackwarsWhenLastEffectIsBlackHole [
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
@@ -198,7 +198,7 @@ CardTest >> test07AllyCardLeavesActiveCardInPlayer [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard removeEffects.
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	
@@ -224,7 +224,7 @@ CardTest >> test08AllyCardAndItsEffectCanBeRemovedFromPlayer [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard removeEffects.
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	
@@ -307,7 +307,7 @@ CardTest >> test11CancellationCardCanRemoveAllyEfect [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard removeEffects.
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	
@@ -336,7 +336,7 @@ CardTest >> test12RedoCardCopiesLastCard [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard removeEffects.
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	
@@ -389,7 +389,7 @@ CardTest >> test14RedoCardCanBeThrownMultipleTimesInARow [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard removeEffects.
-	aLoadedBoard initializeEffect: (BlackHole new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (BlackHole createEffect ) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	
