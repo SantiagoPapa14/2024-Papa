@@ -308,3 +308,21 @@ EffectTest >> test15DoesNotDoAnythingWhenReversed [
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer ship getShipPosition) equals: 10. 
 ]
+
+{ #category : #tests }
+EffectTest >> test16BlackHoleMovesEveryoneExceptTheOneWhoLanded [
+	|aPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	anEffect := BlackHole createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	anEffect reverseEffectPolarity.
+	
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 10. 
+]

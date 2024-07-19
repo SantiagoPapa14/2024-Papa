@@ -7,5 +7,12 @@ Class {
 { #category : #application }
 BlackHole >> applyEffect: affectedPlayer [
 
-	board move: (affectedPlayer) distance: -4
+	| somePlayers |
+	reversed
+		ifTrue: [
+			somePlayers := players.
+			somePlayers remove: affectedPlayer ]
+		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer ].
+
+	somePlayers do: [ :aPlayer | board move: affectedPlayer distance: -4 ]
 ]
