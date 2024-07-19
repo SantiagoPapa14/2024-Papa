@@ -14,11 +14,14 @@ MoonWalk class >> withDistance: aDistance [
 
 { #category : #application }
 MoonWalk >> applyEffect: affectedPlayer [
-
-	players do: [ :aPlayer |
-		affectedPlayer = aPlayer ifFalse: [
-			aPlayer ship getGravity > 0 ifFalse: [
-				board move: aPlayer distance: myDistance * -1 ] ] ]
+	| somePlayers |
+	reversed
+		ifFalse: [
+			somePlayers := players.
+			somePlayers remove: affectedPlayer ]
+		ifTrue: [ somePlayers := OrderedCollection with: affectedPlayer].
+	somePlayers do: [:aPlayer | aPlayer ship getGravity > 0 ifFalse: [
+				board move: aPlayer distance: myDistance * -1 ]].
 ]
 
 { #category : #initialization }

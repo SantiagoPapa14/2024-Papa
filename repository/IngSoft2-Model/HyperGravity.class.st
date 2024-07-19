@@ -15,7 +15,13 @@ HyperGravity class >> withNecessaryRolledResult: someResult [
 { #category : #application }
 HyperGravity >> applyEffect: affectedPlayer [
 
-	affectedPlayer ship setGravity: necessaryRolledResult
+	| somePlayers |
+	reversed
+		ifTrue: [
+			somePlayers := players.
+			somePlayers remove: affectedPlayer ]
+		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer].
+	somePlayers do: [:aPlayer | affectedPlayer ship setGravity: necessaryRolledResult].
 ]
 
 { #category : #initialization }

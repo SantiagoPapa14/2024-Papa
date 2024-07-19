@@ -15,8 +15,15 @@ WormEffect class >> withLink: linkPos [
 { #category : #application }
 WormEffect >> applyEffect: affectedPlayer [
 
-	board takeOut: affectedPlayer.
-	board place: affectedPlayer at: linkPosition
+	| somePlayers |
+	reversed
+		ifTrue: [
+			somePlayers := players.
+			somePlayers remove: affectedPlayer ]
+		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer ].
+	somePlayers do: [ :aPlayer |
+		board takeOut: aPlayer.
+		board place: aPlayer at: linkPosition ]
 ]
 
 { #category : #initialization }

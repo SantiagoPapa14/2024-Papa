@@ -281,7 +281,7 @@ EffectTest >> test14PlayerGetsACardWhenItLandsOnCardDealer [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard removeEffects.
-	aLoadedBoard initializeEffect: (CardDealer new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (CardDealer createEffect) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
@@ -292,7 +292,7 @@ EffectTest >> test14PlayerGetsACardWhenItLandsOnCardDealer [
 ]
 
 { #category : #tests }
-EffectTest >> test15DoesNotDoAnythingWhenReversed [
+EffectTest >> test15AtomicBombDoesNotDoAnythingWhenReversed [
 	|aPlayer someDice aLoadedBoard aGame anEffect|
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
@@ -310,7 +310,7 @@ EffectTest >> test15DoesNotDoAnythingWhenReversed [
 ]
 
 { #category : #tests }
-EffectTest >> test16BlackHoleMovesEveryoneExceptTheOneWhoLanded [
+EffectTest >> test16BlackHoleMovesEveryoneExceptTheOneWhoLandedWhenReversed [
 	|aPlayer bPlayer someDice aLoadedBoard aGame anEffect|
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
@@ -334,6 +334,98 @@ EffectTest >> test16BlackHoleMovesEveryoneExceptTheOneWhoLanded [
 
 { #category : #tests }
 EffectTest >> test17AllPlayersGetRandomCardWhenCardDealerIsReversed [
+	|aPlayer bPlayer cPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+	anEffect := CardDealer createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 3 withMaxLaps: 100.
+	anEffect reverseEffectPolarity.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	cPlayer := aGame getPlayers at: 3.
+	
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	
+	self assert: (bPlayer getCards size) equals: 3.
+	self assert: (cPlayer getCards size) equals: 3.
+]
+
+{ #category : #tests }
+EffectTest >> test18HyperGravityAffectsAllPlayersExceptTheOneWhoLandedWhenReversed [
+	|aPlayer bPlayer cPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+	anEffect := CardDealer createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 3 withMaxLaps: 100.
+	anEffect reverseEffectPolarity.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	cPlayer := aGame getPlayers at: 3.
+	
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	
+	self assert: (bPlayer getCards size) equals: 3.
+	self assert: (cPlayer getCards size) equals: 3.
+]
+
+{ #category : #tests }
+EffectTest >> test19HyperJumpAffectsAllPlayersExceptTheOneWhoLandedWhenReversed [
+	|aPlayer bPlayer cPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+	anEffect := CardDealer createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 3 withMaxLaps: 100.
+	anEffect reverseEffectPolarity.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	cPlayer := aGame getPlayers at: 3.
+	
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	
+	self assert: (bPlayer getCards size) equals: 3.
+	self assert: (cPlayer getCards size) equals: 3.
+]
+
+{ #category : #tests }
+EffectTest >> test20MoonwalkAffectsTheOneWhoLandedWhenReversed [
+	|aPlayer bPlayer cPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+	anEffect := CardDealer createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 3 withMaxLaps: 100.
+	anEffect reverseEffectPolarity.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	cPlayer := aGame getPlayers at: 3.
+	
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	
+	self assert: (bPlayer getCards size) equals: 3.
+	self assert: (cPlayer getCards size) equals: 3.
+]
+
+{ #category : #tests }
+EffectTest >> test21WormHoleAffectsAllPlayersExceptTheOneWhoLandedWhenReversed [
 	|aPlayer bPlayer cPlayer someDice aLoadedBoard aGame anEffect|
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
