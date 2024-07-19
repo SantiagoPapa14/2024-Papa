@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 WormEffect class >> withLink: linkPos [
-	^(self new) initializeLink: linkPos.
+	^((self new) initializeLink: linkPos) initializePolarity.
 ]
 
 { #category : #application }

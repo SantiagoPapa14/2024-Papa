@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 HyperJump class >> withUnits: aUnitList withBoard: aBoard [
-	^(self new) initializeDistances: aUnitList initializeBoard: aBoard
+	^((self new) initializeDistances: aUnitList initializeBoard: aBoard) initializePolarity.
 ]
 
 { #category : #application }

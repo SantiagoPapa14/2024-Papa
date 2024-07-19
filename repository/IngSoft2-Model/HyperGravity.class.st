@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 HyperGravity class >> withNecessaryRolledResult: someResult [
-	^(self new) initializeNecesaryRolledResult: someResult.
+	^((self new) initializeNecesaryRolledResult: someResult) initializePolarity.
 ]
 
 { #category : #application }

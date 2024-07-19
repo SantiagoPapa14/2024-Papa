@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 MoonWalk class >> withDistance: aDistance [
- ^(self new) initializeDistance: aDistance.
+ ^((self new) initializeDistance: aDistance) initializePolarity.
 ]
 
 { #category : #application }

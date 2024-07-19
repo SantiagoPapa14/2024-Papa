@@ -56,14 +56,14 @@ Board >> initializeRandomEffects: someDice [
 		probabilityScore := 100 atRandom.
 
 		probabilityScore <= 30 ifTrue: [
-			square initializeWithEffect: NullEffect new ].
+			square initializeWithEffect: NullEffect createEffect ].
 
 		probabilityScore > 30 ifTrue: [
-			square initializeWithEffect: (CardDealer new)
+			square initializeWithEffect: (CardDealer createEffect)
 			 ].
 
 		probabilityScore > 40 ifTrue: [
-			square initializeWithEffect: BlackHole new ].
+			square initializeWithEffect: BlackHole createEffect ].
 
 		probabilityScore > 60 ifTrue: [
 			| maxRoll |
@@ -85,7 +85,7 @@ Board >> initializeRandomEffects: someDice [
 				].
 
 		probabilityScore > 98 ifTrue: [
-			square initializeWithEffect: AtomicBomb new ] ]
+			square initializeWithEffect: AtomicBomb createEffect ] ]
 ]
 
 { #category : #initialization }

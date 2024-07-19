@@ -3,10 +3,16 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'players',
-		'board'
+		'board',
+		'reversed'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #'as yet unclassified' }
+Effect class >> createEffect [
+	^(self new) initializePolarity.
+]
 
 { #category : #application }
 Effect >> applyEffect: affectedPlayer [
@@ -18,4 +24,16 @@ Effect >> applyEffect: affectedPlayer [
 Effect >> initializePlayers: somePlayers initializeBoard: aBoard [
 players := somePlayers.
 board := aBoard.
+]
+
+{ #category : #application }
+Effect >> initializePolarity [
+	reversed := false.
+]
+
+{ #category : #application }
+Effect >> reverseEffectPolarity [
+	reversed
+		ifTrue: [ reversed := false ]
+		ifFalse: [ reversed := true ]
 ]

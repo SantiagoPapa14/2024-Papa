@@ -10,7 +10,7 @@ EffectTest >> test01AtomicBombResetsAllShip [
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
-	aLoadedBoard initializeEffect: (AtomicBomb new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (AtomicBomb createEffect) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
@@ -21,8 +21,9 @@ EffectTest >> test01AtomicBombResetsAllShip [
 	aGame giveTurn: aPlayer.
 	aGame playTurn: aPlayer.
 	
+	self assert: (bPlayer ship getShipPosition) equals: 1.
 	self assert: (aPlayer ship getShipPosition) equals: 1. 
-	self assert: (bPlayer ship getShipPosition) equals: 1. 
+	 
 	
 	 
 ]
@@ -33,7 +34,7 @@ EffectTest >> test02AtomicBombDoesNotAffectFuel [
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
-	aLoadedBoard initializeEffect: (AtomicBomb new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (AtomicBomb createEffect) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
@@ -215,7 +216,7 @@ EffectTest >> test11ShipDoesNotGetAffectedByEffectsIfInHyperGravity [
 	
 	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
 	aLoadedBoard initializeEffect: (HyperGravity withNecessaryRolledResult: 10) initializeAt: 6.
-	aLoadedBoard initializeEffect: (AtomicBomb new) initializeAt: 10.
+	aLoadedBoard initializeEffect: (AtomicBomb createEffect) initializeAt: 10.
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
@@ -288,4 +289,22 @@ EffectTest >> test14PlayerGetsACardWhenItLandsOnCardDealer [
 	aGame giveTurn: aPlayer.
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer getCards size) equals: 3.
+]
+
+{ #category : #tests }
+EffectTest >> test15DoesNotDoAnythingWhenReversed [
+	|aPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	anEffect := AtomicBomb createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	anEffect reverseEffectPolarity.
+	
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 10. 
 ]
