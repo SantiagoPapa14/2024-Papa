@@ -12,7 +12,7 @@ BlackHole >> applyEffect: affectedPlayer [
 		ifTrue: [
 			somePlayers := players.
 			somePlayers remove: affectedPlayer ]
-		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer ].
-
-	somePlayers do: [ :aPlayer | board move: affectedPlayer distance: -4 ]
+		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer].
+		
+	somePlayers do: [ :aPlayer | board move: aPlayer distance: -4 ]
 ]
