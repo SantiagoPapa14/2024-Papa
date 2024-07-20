@@ -8,20 +8,21 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+HyperJump class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+reversedPolarization ifTrue:[
+	^(players clone) remove: affectedPlayer.
+	].
+	^OrderedCollection with: affectedPlayer.
+]
+
+{ #category : #'as yet unclassified' }
 HyperJump class >> withUnits: aUnitList withBoard: aBoard [
 	^((self new) initializeDistances: aUnitList initializeBoard: aBoard) initializePolarity.
 ]
 
 { #category : #application }
 HyperJump >> applyEffect: affectedPlayer [
-
-	| somePlayers |
-	reversed
-		ifTrue: [
-			somePlayers := players.
-			somePlayers remove: affectedPlayer ]
-		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer ].
-	somePlayers do: [ :aPlayer |
+(HyperJump filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [ :aPlayer |
 		board move: affectedPlayer distance: self cycleDistance ]
 ]
 

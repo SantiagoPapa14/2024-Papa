@@ -8,20 +8,21 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+HyperGravity class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+reversedPolarization ifTrue:[
+	^(players clone) remove: affectedPlayer.
+	].
+	^OrderedCollection with: affectedPlayer.
+]
+
+{ #category : #'as yet unclassified' }
 HyperGravity class >> withNecessaryRolledResult: someResult [
 	^((self new) initializeNecesaryRolledResult: someResult) initializePolarity.
 ]
 
 { #category : #application }
 HyperGravity >> applyEffect: affectedPlayer [
-
-	| somePlayers |
-	reversed
-		ifTrue: [
-			somePlayers := players.
-			somePlayers remove: affectedPlayer ]
-		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer].
-	somePlayers do: [:aPlayer | affectedPlayer ship setGravity: necessaryRolledResult].
+(HyperGravity filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do:  [:aPlayer | affectedPlayer ship setGravity: necessaryRolledResult].
 ]
 
 { #category : #initialization }

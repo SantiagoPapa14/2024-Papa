@@ -14,6 +14,11 @@ Effect class >> createEffect [
 	^(self new) initializePolarity.
 ]
 
+{ #category : #'as yet unclassified' }
+Effect class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+self subclassResponsibility.
+]
+
 { #category : #application }
 Effect >> applyEffect: affectedPlayer [
 

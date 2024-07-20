@@ -4,17 +4,17 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'as yet unclassified' }
+BlackHole class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+reversedPolarization ifTrue:[
+	^(players clone) remove: affectedPlayer.
+	].
+	^OrderedCollection with: affectedPlayer.
+]
+
 { #category : #application }
 BlackHole >> applyEffect: affectedPlayer [
-
-	| somePlayers |
-	reversed
-		ifTrue: [
-			somePlayers := players.
-			somePlayers remove: affectedPlayer ]
-		ifFalse: [ somePlayers := OrderedCollection with: affectedPlayer].
-		
-	somePlayers do: [ :aPlayer | board move: aPlayer distance: -4 ]
+(BlackHole filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [ :aPlayer | board move: aPlayer distance: -4 ]
 	
 
 ]
