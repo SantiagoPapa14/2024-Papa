@@ -436,3 +436,52 @@ CardTest >> test15ReversePolarityCardMakesAtomicBombDoNothing [
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer ship getShipPosition) equals: 10. 
 ]
+
+{ #category : #tests }
+CardTest >> test16BlackHoleIsReversedWhenReversePolarityCardGetsUsedOnIt [
+	|aPlayer bPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	anEffect := BlackHole createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aPlayer addCards: (OrderedCollection with: ReversePolarity).
+	bPlayer := aGame getPlayers at: 2.
+	aLoadedBoard place: aPlayer at: 5.
+	aLoadedBoard place: bPlayer at: 10.
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aLoadedBoard getSquare: 10). 
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 10. 
+	self assert: (bPlayer ship getShipPosition) equals: 6. 
+	
+
+]
+
+{ #category : #tests }
+CardTest >> test17BlackHoleWorksNormallyWhenReversePolarityCardGetsUsedOnItTwice [
+	|aPlayer bPlayer someDice aLoadedBoard aGame anEffect|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	anEffect := BlackHole createEffect.
+	aLoadedBoard initializeEffect: (anEffect) initializeAt: 10.
+	
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aPlayer addCards: (OrderedCollection with: ReversePolarity with: ReversePolarity).
+	bPlayer := aGame getPlayers at: 2.
+	aLoadedBoard place: aPlayer at: 5.
+	aLoadedBoard place: bPlayer at: 10.
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aLoadedBoard getSquare: 10). 
+	aGame player: aPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aLoadedBoard getSquare: 10).
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 6. 
+	self assert: (bPlayer ship getShipPosition) equals: 10. 
+	
+
+]

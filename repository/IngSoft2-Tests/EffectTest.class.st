@@ -158,7 +158,7 @@ EffectTest >> test08HyperJumpParsecListResets [
 
 	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
-	aPlayer ship initializeFuel: 100101012.
+	aPlayer ship initializeShipWithFuel: 100101012.
 	aLoadedBoard place: aPlayer at: 10.
 	aGame giveTurn: aPlayer.
 	aGame playTurn: aPlayer.

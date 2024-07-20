@@ -9,14 +9,15 @@ Class {
 		'position',
 		'fuel',
 		'maxFuel',
-		'laps'
+		'laps',
+		'turbines'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
 Ship class >> withFuel: someFuel [
-	^(self new) initializeFuel: someFuel.
+	^(self new) initializeShipWithFuel: someFuel.
 ]
 
 { #category : #getsAndSets }
@@ -49,6 +50,11 @@ Ship >> consumeFuel: someFuel [
 ]
 
 { #category : #getsAndSets }
+Ship >> explodeTurbine [
+	turbines := turbines - 1.
+]
+
+{ #category : #getsAndSets }
 Ship >> getFuel [
 	^fuel 
 ]
@@ -69,8 +75,9 @@ Ship >> getShipPosition [
 ]
 
 { #category : #getsAndSets }
-Ship >> initializeFuel: someFuel [
+Ship >> initializeShipWithFuel: someFuel [
 	maxFuel := someFuel.
+	turbines := 3.
 	laps := 0.
 	gravityLevel := 0.
 	fuel := someFuel.
@@ -92,4 +99,9 @@ Ship >> setGravity: someLevel [
 Ship >> setShipPosition:  someSquare [
 
 	position := someSquare
+]
+
+{ #category : #getsAndSets }
+Ship >> turbinesLeft [
+	^turbines.
 ]

@@ -95,3 +95,22 @@ ShipTest >> test07ShipsLapsReduceWhenExceedsBoardGoingBackwards [
 	aPlayer ship addLaps: 2.
 	self assert: (aPlayer ship getLaps ) equals: 1.
 ]
+
+{ #category : #tests }
+ShipTest >> test08ShipCanNotMoveWithoutTurbines [
+	|aPlayer someDice aLoadedBoard aGame|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+	
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aLoadedBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 5. 
+]
