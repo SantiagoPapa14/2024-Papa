@@ -485,3 +485,62 @@ CardTest >> test17BlackHoleWorksNormallyWhenReversePolarityCardGetsUsedOnItTwice
 	
 
 ]
+
+{ #category : #tests }
+CardTest >> test18AccelerationAndRedoCombinedAddsTwoAccelerations [
+	|aPlayer bPlayer someDice aLoadedBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aLoadedBoard place: aPlayer at: 5.
+	aLoadedBoard place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Acceleration with: Redo).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: Acceleration targetPlayer: (aGame getPlayers) target: nil.
+	aGame player: aPlayer throwsCard: Redo targetPlayer: (aGame getPlayers) target: Acceleration.
+	aGame playTurn: aPlayer.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 12.
+	self assert: (bPlayer ship getShipPosition) equals: 12.
+
+
+
+]
+
+{ #category : #tests }
+CardTest >> test19AccelerationAndRedoCombinedThenCancelOnlyRemovesOneAcceleration [
+	|aPlayer bPlayer someDice aLoadedBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aLoadedBoard := LoadedBoard clone: (Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice ).
+	aLoadedBoard removeEffects.
+
+	aGame := Game withBoard: aLoadedBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aLoadedBoard place: aPlayer at: 5.
+	aLoadedBoard place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Acceleration with: Redo with: Cancellation).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: Acceleration targetPlayer: (aGame getPlayers) target: nil.
+	aGame player: aPlayer throwsCard: Redo targetPlayer: (aGame getPlayers) target: Acceleration.
+	aGame player: aPlayer throwsCard: Cancellation targetPlayer: aPlayer target: Acceleration.
+	aGame playTurn: aPlayer.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 11.
+	self assert: (bPlayer ship getShipPosition) equals: 12.
+
+
+
+]

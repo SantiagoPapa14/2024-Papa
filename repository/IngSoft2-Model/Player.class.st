@@ -72,7 +72,7 @@ Player >> initializeName: aName initializeShip: aShip [
 { #category : #accessing }
 Player >> penalize: penalizationAmount [
 
-	penalization := penalization + penalizationAmount
+	penalization := penalization + penalizationAmount.
 ]
 
 { #category : #accessing }

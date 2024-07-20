@@ -33,8 +33,12 @@ Ship >> addLaps: lapAmount [
 { #category : #accessing }
 Ship >> canMove: aDistance [
 
-	aDistance = gravityLevel ifTrue: [ gravityLevel := 0 ].
-	^ gravityLevel = 0
+	gravityLevel = 0 ifFalse: [
+		aDistance = gravityLevel ifFalse: [
+			self explodeTurbine.
+			^ false ].
+		gravityLevel := 0 ].
+	^ true
 ]
 
 { #category : #accessing }
@@ -51,7 +55,8 @@ Ship >> consumeFuel: someFuel [
 
 { #category : #getsAndSets }
 Ship >> explodeTurbine [
-	turbines := turbines - 1.
+
+	turbines > 0 ifTrue: [ turbines := turbines - 1 ]
 ]
 
 { #category : #getsAndSets }
