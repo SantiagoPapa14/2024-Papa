@@ -44,6 +44,11 @@ Board >> getParsecs [
 ]
 
 { #category : #getsAndSets }
+Board >> getSquare: aSquareIndex [
+	^squares at: aSquareIndex.
+]
+
+{ #category : #getsAndSets }
 Board >> getSquares [
 	^squares.
 ]
