@@ -16,6 +16,7 @@ BoardTest >> test01BoardIsCreatedWithNSquares [
 	aBoardSize := 4.
 	aBoard := Board withSize: aBoardSize withWorms: false withParsecs: 3 withDice: (OrderedCollection with: (LoadedDie of: 3)).
 	self assert: aBoard boardSize equals: aBoardSize.
+	self assert: aBoard getSquares size equals: aBoardSize.
 ]
 
 { #category : #tests }

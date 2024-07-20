@@ -128,7 +128,7 @@ Board >> move: aPlayer distance: aDistance [
 			^ self place: aPlayer at: shipPosition + aDistance ]
 		ifFalse: [
 			aPlayer ship explodeTurbine.
-			self resetToStart: aPlayer ship.
+			self resetToStart: aPlayer.
 			aPlayer penalize: 2.
 			^ NullEffect new ]
 ]
