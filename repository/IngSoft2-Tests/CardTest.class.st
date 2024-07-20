@@ -546,7 +546,7 @@ CardTest >> test19AccelerationAndRedoCombinedThenCancelOnlyRemovesOneAcceleratio
 ]
 
 { #category : #tests }
-CardTest >> test20RepeatCardAppliesEffectOnSelectedPlayerIndependentlyOfPolarization [
+CardTest >> test20RepeatCardAppliesMoonwalkEffectConsideringPolarization [
 	|aPlayer bPlayer someDice aBoard aGame |
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
@@ -567,4 +567,28 @@ CardTest >> test20RepeatCardAppliesEffectOnSelectedPlayerIndependentlyOfPolariza
 	aPlayer ship resetFuelTank.
 	aGame player: aPlayer throwsCard: Repeat targetPlayer: bPlayer target: nil.
 	self assert: (bPlayer ship getShipPosition) equals: 1.
+]
+
+{ #category : #tests }
+CardTest >> test21RepeatCardDoesNotApplyPolarizedAtomicBomb [
+	|aPlayer bPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility initializeEffect: (AtomicBomb createEffect) initializeAt: 10 onBoard: aBoard.
+
+	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard place: aPlayer at: 5.
+	aBoard place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Repeat with: ReversePolarity).
+	
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aBoard getSquare: 10).
+	aGame playTurn: aPlayer.
+	aPlayer ship resetFuelTank.
+	aGame player: aPlayer throwsCard: Repeat targetPlayer: bPlayer target: nil.
+	self assert: (bPlayer ship getShipPosition) equals: 5.
+	self assert: (aPlayer ship getShipPosition) equals: 10.
 ]
