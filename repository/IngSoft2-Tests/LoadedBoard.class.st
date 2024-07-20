@@ -58,6 +58,11 @@ LoadedBoard >> getParsecs [
 ]
 
 { #category : #initialization }
+LoadedBoard >> getSquare: aSquareIndex [
+	^squares at: aSquareIndex.
+]
+
+{ #category : #initialization }
 LoadedBoard >> initializeEffect: anEffect initializeAt: aSquare [
 	(squares at: aSquare) initializeWithEffect: anEffect.
 	

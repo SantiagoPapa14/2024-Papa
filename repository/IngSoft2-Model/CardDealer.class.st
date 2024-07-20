@@ -7,7 +7,15 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'as yet unclassified' }
+CardDealer class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+reversedPolarization ifTrue:[
+	^players select: [ :player | (player ~= affectedPlayer)].
+	].
+	^OrderedCollection with: affectedPlayer.
+]
+
 { #category : #application }
 CardDealer >> applyEffect: affectedPlayer [
-	affectedPlayer addCards: (Deck getRandomCards: 1).
+(CardDealer filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [:aPlayer | aPlayer addCards: (Deck getRandomCards: 1)].
 ]

@@ -8,17 +8,24 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+MoonWalk class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [
+	reversedPolarization
+		ifTrue: [ ^ OrderedCollection with: affectedPlayer ]
+		ifFalse: [
+			^ players select: [ :player | (player ~= affectedPlayer) ]. 
+		]
+]
+
+{ #category : #'as yet unclassified' }
 MoonWalk class >> withDistance: aDistance [
- ^(self new) initializeDistance: aDistance.
+ ^((self new) initializeDistance: aDistance) initializePolarity.
 ]
 
 { #category : #application }
 MoonWalk >> applyEffect: affectedPlayer [
-
-	players do: [ :aPlayer |
-		affectedPlayer = aPlayer ifFalse: [
-			aPlayer ship getGravity > 0 ifFalse: [
-				board move: aPlayer distance: myDistance * -1 ] ] ]
+(MoonWalk filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do:  [:aPlayer | 
+	aPlayer ship getGravity > 0 ifFalse: [
+				board move: aPlayer distance: myDistance * -1 ]].
 ]
 
 { #category : #initialization }

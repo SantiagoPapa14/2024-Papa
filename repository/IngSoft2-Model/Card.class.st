@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'targetPlayer',
-		'targetCard',
+		'target',
 		'lastEffect',
 		'lastCard',
 		'board'
@@ -18,7 +18,7 @@ Card class >> canBeUsedAnytime [
 
 { #category : #'as yet unclassified' }
 Card class >> withTargetPlayer: aTargetPlayer withTargetCard: aTargetCard withLastEffect: lastEffect withLastCard: lastCard withBoard: aBoard [
-	^(self new) initializeTargetPlayer: aTargetPlayer initializeTargetCard: aTargetCard initializeLastEffect: lastEffect initializeLastCard: lastCard initializeBoard: aBoard.
+	^(self new) initializeTargetPlayer: aTargetPlayer initializeTarget: aTargetCard initializeLastEffect: lastEffect initializeLastCard: lastCard initializeBoard: aBoard.
 ]
 
 { #category : #initialization }
@@ -27,9 +27,9 @@ Card >> applyCardEffect [
 ]
 
 { #category : #initialization }
-Card >> initializeTargetPlayer: aTargetPlayer initializeTargetCard: aTargetCard initializeLastEffect: anEffect initializeLastCard: aLastCard initializeBoard: aBoard [
+Card >> initializeTargetPlayer: aTargetPlayer initializeTarget: aTarget initializeLastEffect: anEffect initializeLastCard: aLastCard initializeBoard: aBoard [
 	targetPlayer := aTargetPlayer.
-	targetCard := aTargetCard.
+	target := aTarget.
 	lastEffect := anEffect.
 	lastCard := aLastCard.
 	board := aBoard.

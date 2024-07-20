@@ -123,12 +123,12 @@ Game >> playTurn: player [
 ]
 
 { #category : #action }
-Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer targetCard: aTargetCard [
+Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer target: aTarget [
 
 	(aPlayer = turnHolder or: (aCard canBeUsedConsidering: lastCard)) ifTrue: [
 		aPlayer useCard: (aCard
 				 withTargetPlayer: aTargetPlayer
-				 withTargetCard: aTargetCard
+				 withTargetCard: aTarget
 				 withLastEffect: lastEffect
 				 withLastCard: lastCard
 				 withBoard: board).

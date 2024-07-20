@@ -6,5 +6,5 @@ Class {
 
 { #category : #initialization }
 Cancellation >> applyCardEffect: cardUser [
-	targetPlayer deactivateCard: targetCard.
+	targetPlayer deactivateCard: target.
 ]
