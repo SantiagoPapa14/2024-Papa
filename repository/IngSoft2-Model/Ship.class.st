@@ -9,14 +9,15 @@ Class {
 		'position',
 		'fuel',
 		'maxFuel',
-		'laps'
+		'laps',
+		'turbines'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
 Ship class >> withFuel: someFuel [
-	^(self new) initializeFuel: someFuel.
+	^(self new) initializeShipWithFuel: someFuel.
 ]
 
 { #category : #getsAndSets }
@@ -32,8 +33,12 @@ Ship >> addLaps: lapAmount [
 { #category : #accessing }
 Ship >> canMove: aDistance [
 
-	aDistance = gravityLevel ifTrue: [ gravityLevel := 0 ].
-	^ gravityLevel = 0
+	gravityLevel = 0 ifFalse: [
+		aDistance = gravityLevel ifFalse: [
+			self explodeTurbine.
+			^ false ].
+		gravityLevel := 0 ].
+	^ true
 ]
 
 { #category : #accessing }
@@ -46,6 +51,12 @@ Ship >> consumeFuel: someFuel [
 		fuel := 0.
 		^ false ].
 	^ true
+]
+
+{ #category : #getsAndSets }
+Ship >> explodeTurbine [
+
+	turbines > 0 ifTrue: [ turbines := turbines - 1 ]
 ]
 
 { #category : #getsAndSets }
@@ -69,8 +80,9 @@ Ship >> getShipPosition [
 ]
 
 { #category : #getsAndSets }
-Ship >> initializeFuel: someFuel [
+Ship >> initializeShipWithFuel: someFuel [
 	maxFuel := someFuel.
+	turbines := 3.
 	laps := 0.
 	gravityLevel := 0.
 	fuel := someFuel.
@@ -92,4 +104,9 @@ Ship >> setGravity: someLevel [
 Ship >> setShipPosition:  someSquare [
 
 	position := someSquare
+]
+
+{ #category : #getsAndSets }
+Ship >> turbinesLeft [
+	^turbines.
 ]

@@ -14,6 +14,11 @@ reversedPolarization ifTrue:[
 
 { #category : #application }
 BlackHole >> applyEffect: affectedPlayer [
-(BlackHole filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [ :aPlayer | board move: aPlayer distance: -4 ]
 
+	(BlackHole
+		 filterPlayers: players
+		 withAffected: affectedPlayer
+		 withPolarization: reversed) do: [ :aPlayer |
+		board move: aPlayer distance: -4.
+		aPlayer ship explodeTurbine ]
 ]

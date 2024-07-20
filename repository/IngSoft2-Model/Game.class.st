@@ -39,7 +39,7 @@ Game >> canPlay: aPlayer [
 	penalization := aPlayer getPenalization.
 	penalization = 0 ifFalse: [
 		penalization := penalization - 1.
-		penalization = 0 ifTrue: [ aPlayer ship resetFuelTank ].
+		(penalization = 0) ifTrue: [ aPlayer ship resetFuelTank ].
 		^ false ].
 	^ true
 ]
@@ -112,7 +112,7 @@ Game >> initializeBoard: aBoard initializeDice: someDice initializePlayers: play
 { #category : #action }
 Game >> playTurn: player [
 
-	turnHolder = player ifTrue: [
+	(turnHolder = player and: player ship turbinesLeft > 0) ifTrue: [
 		| rollRes thisEffect |
 		rollRes := player play: dice.
 		self checkBounty: rollRes for: player.

@@ -27,9 +27,10 @@ Board >> boardSize [
 
 { #category : #action }
 Board >> canReach: aPlayer distance: aDistance [
+
 	| missingFuel |
 	(aPlayer ship consumeFuel: aDistance) ifFalse: [
-		(aPlayer getAlly isNil) ifTrue: [^false].
+		aPlayer getAlly isNil ifTrue: [ ^ false ].
 		missingFuel := aDistance - aPlayer getAlly ship getFuel.
 		(aPlayer getAlly ship consumeFuel: missingFuel) ifFalse: [
 			self resetToStart: aPlayer getAlly.
@@ -120,20 +121,16 @@ Board >> move: aPlayer distance: aDistance [
 
 	| shipPosition |
 	shipPosition := aPlayer ship getShipPosition.
-	(self canReach: aPlayer distance: aDistance )
+	(self canReach: aPlayer distance: aDistance)
 		ifTrue: [
-			(self takeOut: aPlayer).
+			self takeOut: aPlayer.
 			aPlayer ship setShipPosition: shipPosition + aDistance.
-			^(self place: aPlayer at: shipPosition + aDistance)
-			 ]
+			^ self place: aPlayer at: shipPosition + aDistance ]
 		ifFalse: [
-			
-			
-			 self resetToStart: aPlayer ship.
-					  aPlayer ship penalize: 2.
-					  ^NullEffect new.
-					 ].
-	
+			aPlayer ship explodeTurbine.
+			self resetToStart: aPlayer ship.
+			aPlayer penalize: 2.
+			^ NullEffect new ]
 ]
 
 { #category : #action }
