@@ -108,10 +108,10 @@ ShipTest >> test08ShipCanNotMoveWithoutTurbines [
 	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
 	aBoard place: aPlayer at: 5.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
 	aGame giveTurn: aPlayer.
-	aPlayer ship explodeTurbine.
-	aPlayer ship explodeTurbine.
-	aPlayer ship explodeTurbine.
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer ship getShipPosition) equals: 5. 
 ]

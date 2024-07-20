@@ -31,14 +31,19 @@ GameTest >> test01ValidGameCanFinish [
 	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	self assert: game hasWinner equals: true
 ]
 

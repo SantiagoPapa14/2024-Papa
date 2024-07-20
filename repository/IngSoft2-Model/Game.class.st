@@ -83,7 +83,7 @@ Game >> getRanking [
 { #category : #action }
 Game >> giveTurn: aPlayer [
 
-	(self canPlay: aPlayer) ifTrue: [ turnHolder := aPlayer ]
+	((self canPlay: aPlayer) and: aPlayer isInGame) ifTrue: [ turnHolder := aPlayer ]
 ]
 
 { #category : #action }
@@ -112,7 +112,7 @@ Game >> initializeBoard: aBoard initializeDice: someDice initializePlayers: play
 { #category : #action }
 Game >> playTurn: player [
 
-	(turnHolder = player and: player ship turbinesLeft > 0) ifTrue: [
+	(turnHolder = player and: player isInGame) ifTrue: [
 		| rollRes thisEffect |
 		rollRes := player play: dice.
 		self checkBounty: rollRes for: player.
@@ -125,7 +125,8 @@ Game >> playTurn: player [
 { #category : #action }
 Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer target: aTarget [
 
-	(aPlayer = turnHolder or: (aCard canBeUsedConsidering: lastCard)) ifTrue: [
+	((aPlayer = turnHolder or: (aCard canBeUsedConsidering: lastCard))
+		 and: aPlayer isInGame) ifTrue: [
 		aPlayer useCard: (aCard
 				 withTargetPlayer: aTargetPlayer
 				 withTargetCard: aTarget
@@ -139,5 +140,5 @@ Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer target: aT
 { #category : #action }
 Game >> skipTurn: player [
 
-	turnHolder = player ifTrue: [ player ship resetFuelTank ]
+	(turnHolder = player) ifTrue: [ player ship resetFuelTank. turnHolder := nil.]
 ]

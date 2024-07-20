@@ -35,3 +35,12 @@ SquareTest >> test04SquareReturnsShipWhenDockedShip [
 	aSquare dockShip: aShip.
 	self assert: ((aSquare getDockedShips) at: 1) equals: aShip.
 ]
+
+{ #category : #tests }
+SquareTest >> test05SquareRemembersWhatEffectWasSetOnIt [ 
+	|aSquare anEffect|
+	aSquare := Square createEmptySquare.
+	anEffect := (BlackHole createEffect).
+	aSquare initializeWithEffect: anEffect.
+	self assert: (aSquare getEffect) equals: anEffect.
+]

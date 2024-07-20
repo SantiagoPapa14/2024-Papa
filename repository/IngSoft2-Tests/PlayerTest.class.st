@@ -31,7 +31,7 @@ PlayerTest >> test02PlayerCanReceiveCards [
 	aPlayer := Player named: 'Pepe' withShip: (Ship withFuel: 10).
 	aCard := Card new.
 	aPlayer addCards: (OrderedCollection with: aCard).
-	self assert: (aPlayer getCards ) equals: (OrderedCollection with: aCard). 
+	self assert: (aPlayer getCards) equals: (OrderedCollection with: aCard). 
 	 
 ]
 
@@ -120,5 +120,67 @@ PlayerTest >> test08PlayerCantUseCardThatHeDoesNotHave [
 	
 	aGame giveTurn: aPlayer.
 	self should: [ aGame player: aPlayer throwsCard: Ally targetPlayer: aPlayer target: nil ] raise: Error withMessage: 'Player does not have such card.'. 
+	 
+]
+
+{ #category : #tests }
+PlayerTest >> test09PlayerCantUseInstantCardsWhenOutOfTurbines [
+	| aPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+
+	aBoard := Board
+			                 withSize: 20
+			                 withWorms: false
+			                 withParsecs: 1
+			                 withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game
+		         withBoard: aBoard
+		         withDice: someDice
+		         withPlayers: 2
+		         withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+
+	aBoard place: aPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Repeat).
+	BoardUtility initializeEffect: (BlackHole createEffect) initializeAt: 10 onBoard: aBoard. 
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	aGame skipTurn: aPlayer.
+	aGame giveTurn: aPlayer.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aGame player: aPlayer throwsCard: Repeat targetPlayer: (OrderedCollection with: aPlayer) target: nil.
+	self assert: (aPlayer ship getShipPosition) equals: 6. 
+	 
+]
+
+{ #category : #tests }
+PlayerTest >> test09PlayerCantUsePermanentCardsWhenOutOfTurbines [
+	| aPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+
+	aBoard := Board
+			                 withSize: 20
+			                 withWorms: false
+			                 withParsecs: 1
+			                 withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game
+		         withBoard: aBoard
+		         withDice: someDice
+		         withPlayers: 2
+		         withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+
+	aBoard place: aPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Acceleration).
+	aGame giveTurn: aPlayer.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aGame player: aPlayer throwsCard: Acceleration targetPlayer: (OrderedCollection with: aPlayer) target: nil.
+	self assert: (aPlayer getActiveCards size) equals: 0. 
 	 
 ]
