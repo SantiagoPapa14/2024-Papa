@@ -22,7 +22,7 @@ Card class >> withTargetPlayer: aTargetPlayer withTargetCard: aTargetCard withLa
 ]
 
 { #category : #initialization }
-Card >> applyCardEffect [
+Card >> applyCardEffect: aPlayer [
 	self subclassResponsibility.
 ]
 
