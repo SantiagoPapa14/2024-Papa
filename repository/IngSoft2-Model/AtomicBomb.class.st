@@ -14,6 +14,7 @@ reversedPolarization ifTrue:[
 
 { #category : #application }
 AtomicBomb >> applyEffect: affectedPlayer [
+	Transcript show: 'Boom boom'.
 	(AtomicBomb filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [ :aPlayer |
 		aPlayer ship getGravity > 0 ifFalse: [ board resetToStart: aPlayer ] ]
 ]

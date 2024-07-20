@@ -117,9 +117,10 @@ Game >> playTurn: player [
 		rollRes := player play: dice.
 		self checkBounty: rollRes for: player.
 		thisEffect := board move: player distance: rollRes.
-		thisEffect initializePlayers: players initializeBoard: board. 
+		thisEffect initializePlayers: players initializeBoard: board.
 		thisEffect applyEffect: player.
-		lastEffect := thisEffect ]
+		(thisEffect isKindOf: NullEffect) ifFalse: [
+			lastEffect := thisEffect ] ]
 ]
 
 { #category : #action }
