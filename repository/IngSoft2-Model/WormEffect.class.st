@@ -10,7 +10,7 @@ Class {
 { #category : #'as yet unclassified' }
 WormEffect class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
 reversedPolarization ifTrue:[
-	^(players clone) remove: affectedPlayer.
+	^players select: [ :player | (player ~= affectedPlayer)].
 	].
 	^OrderedCollection with: affectedPlayer.
 ]
