@@ -27,16 +27,18 @@ Board >> boardSize [
 
 { #category : #action }
 Board >> canReach: aPlayer distance: aDistance [
-
-	| missingFuel |
-	(aPlayer ship consumeFuel: aDistance) ifFalse: [
-		aPlayer getAlly isNil ifTrue: [ ^ false ].
-		missingFuel := aDistance - aPlayer getAlly ship getFuel.
-		(aPlayer getAlly ship consumeFuel: missingFuel) ifFalse: [
-			self resetToStart: aPlayer getAlly.
-			aPlayer getAlly penalize: 2.
-			^ false ] ].
-	^ true
+	|missingFuel|
+	
+	missingFuel := aDistance - aPlayer ship getFuel.
+	(missingFuel > 0 and: aPlayer getAlly isNotNil) ifTrue:[
+		(aPlayer getAlly ship consumeFuel: missingFuel) ifFalse: [ 
+			 self resetToStart: aPlayer getAlly.
+			 aPlayer getAlly penalize: 2.
+			^false.
+			].
+		^true.
+		].
+	^(aPlayer ship consumeFuel: aDistance).
 ]
 
 { #category : #getsAndSets }
