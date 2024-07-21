@@ -36,11 +36,12 @@ ShipTest >> test02IsValidWhenShipsFuelReducesProportionallyToMovement [
 { #category : #tests }
 ShipTest >> test03ShipsPositionIsResetWhenShipDoesNotHaveEnoughFuelToMove [
 	|aPlayer aBoard aGame|
-	aBoard := LoadedBoard clone: (Board withSize: 100 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 3))).
-	aBoard removeEffects.
+	aBoard := Board withSize: 100 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 5)).
+	BoardUtility removeEffectsOnBoard: aBoard.
 	aGame := Game withBoard: aBoard withDice: (OrderedCollection with: (LoadedDie of: 5)) withPlayers: 1  withMaxLaps: 1.
 	aPlayer := (aGame getPlayers) at: 1.
-	aBoard place: aPlayer at: 1.
+	aBoard place: aPlayer at: 2.
+	aGame giveTurn: aPlayer.
 	aGame playTurn: aPlayer.
 	aGame playTurn: aPlayer.
 	aGame playTurn: aPlayer.
@@ -62,8 +63,8 @@ ShipTest >> test04ShipDoesntMoveWhenSkipsTurn [
 { #category : #tests }
 ShipTest >> test05ShipGetsRefueledWhenSkipsTurn [
 	|aPlayer aBoard aGame|
-	aBoard :=LoadedBoard clone: ( Board withSize: 20 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 3))).
-	aBoard removeEffects.
+	aBoard :=Board withSize: 20 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 3)).
+	BoardUtility removeEffectsOnBoard: aBoard.
 	aGame := Game withBoard: aBoard withDice: (OrderedCollection with: (LoadedDie of: 3)) withPlayers: 1  withMaxLaps: 1.
 	aPlayer := (aGame getPlayers) at: 1.
 	aBoard place: aPlayer at: 1.
@@ -94,4 +95,89 @@ ShipTest >> test07ShipsLapsReduceWhenExceedsBoardGoingBackwards [
 	aBoard move: aPlayer distance: -5.
 	aPlayer ship addLaps: 2.
 	self assert: (aPlayer ship getLaps ) equals: 1.
+]
+
+{ #category : #tests }
+ShipTest >> test08ShipCanNotMoveWithoutTurbines [
+	|aPlayer someDice aBoard aGame|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	
+	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aBoard place: aPlayer at: 5.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aPlayer ship explodeTurbine.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 5. 
+]
+
+{ #category : #tests }
+ShipTest >> test09ShipsTurbineExplodesWhenRollResultIsNotEqualsToGravityLevel [
+	|aPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility initializeEffect: (HyperGravity withNecessaryRolledResult: 1) initializeAt: 10 onBoard: aBoard.
+
+	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship turbinesLeft) equals: 1. 
+	
+]
+
+{ #category : #tests }
+ShipTest >> test10ShipsTurbineExplodesWhenItGoesThroughBlackHole [
+	|aPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility initializeEffect: (BlackHole createEffect) initializeAt: 10 onBoard: aBoard.
+
+	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship turbinesLeft) equals: 2. 
+	
+]
+
+{ #category : #tests }
+ShipTest >> test11ShipsTurbineExplodesIfItDoesNotHaveEnoughFuelToMove [
+	|aPlayer aBoard aGame|
+	aBoard := Board withSize: 100 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 5)).
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game withBoard: aBoard withDice: (OrderedCollection with: (LoadedDie of: 5)) withPlayers: 1  withMaxLaps: 1.
+	aPlayer := (aGame getPlayers) at: 1.
+	aBoard place: aPlayer at: 2.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship turbinesLeft) equals: 1. 
+]
+
+{ #category : #tests }
+ShipTest >> test12ShipCannotMoveWhenGravityLevelIsDifferentThanRollResult [
+	|aPlayer aBoard aGame|
+	aBoard :=Board withSize: 20 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 3)).
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game withBoard: aBoard withDice: (OrderedCollection with: (LoadedDie of: 3)) withPlayers: 1  withMaxLaps: 1.
+	aPlayer := aGame getPlayers at: 1.
+	aBoard place: aPlayer at: 1.
+	aPlayer ship setGravity: 10.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 1. 
 ]

@@ -8,14 +8,25 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+HyperGravity class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+reversedPolarization ifTrue:[
+	^players select: [ :player | (player ~= affectedPlayer)].
+	].
+	^OrderedCollection with: affectedPlayer.
+]
+
+{ #category : #'as yet unclassified' }
 HyperGravity class >> withNecessaryRolledResult: someResult [
-	^(self new) initializeNecesaryRolledResult: someResult.
+	^((self new) initializeNecesaryRolledResult: someResult) initializePolarity.
 ]
 
 { #category : #application }
 HyperGravity >> applyEffect: affectedPlayer [
-
-	affectedPlayer ship setGravity: necessaryRolledResult
+	(HyperGravity
+		 filterPlayers: players
+		 withAffected: affectedPlayer
+		 withPolarization: reversed) do:  [:aPlayer |
+	 aPlayer ship setGravity: necessaryRolledResult].
 ]
 
 { #category : #initialization }

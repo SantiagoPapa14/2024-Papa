@@ -8,15 +8,23 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+WormEffect class >> filterPlayers: players withAffected: affectedPlayer withPolarization: reversedPolarization [ 
+reversedPolarization ifTrue:[
+	^players select: [ :player | (player ~= affectedPlayer)].
+	].
+	^OrderedCollection with: affectedPlayer.
+]
+
+{ #category : #'as yet unclassified' }
 WormEffect class >> withLink: linkPos [
-	^(self new) initializeLink: linkPos.
+	^((self new) initializeLink: linkPos) initializePolarity.
 ]
 
 { #category : #application }
 WormEffect >> applyEffect: affectedPlayer [
-
-	board takeOut: affectedPlayer.
-	board place: affectedPlayer at: linkPosition
+(WormEffect filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [ :aPlayer |
+		board takeOut: aPlayer.
+		board place: aPlayer at: linkPosition ]
 ]
 
 { #category : #initialization }

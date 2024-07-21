@@ -39,7 +39,7 @@ Game >> canPlay: aPlayer [
 	penalization := aPlayer getPenalization.
 	penalization = 0 ifFalse: [
 		penalization := penalization - 1.
-		penalization = 0 ifTrue: [ aPlayer ship resetFuelTank ].
+		(penalization = 0) ifTrue: [ aPlayer ship resetFuelTank ].
 		^ false ].
 	^ true
 ]
@@ -83,7 +83,7 @@ Game >> getRanking [
 { #category : #action }
 Game >> giveTurn: aPlayer [
 
-	(self canPlay: aPlayer) ifTrue: [ turnHolder := aPlayer ]
+	((self canPlay: aPlayer) and: aPlayer isInGame) ifTrue: [ turnHolder := aPlayer ]
 ]
 
 { #category : #action }
@@ -112,23 +112,25 @@ Game >> initializeBoard: aBoard initializeDice: someDice initializePlayers: play
 { #category : #action }
 Game >> playTurn: player [
 
-	turnHolder = player ifTrue: [
+	(turnHolder = player and: player isInGame) ifTrue: [
 		| rollRes thisEffect |
 		rollRes := player play: dice.
 		self checkBounty: rollRes for: player.
 		thisEffect := board move: player distance: rollRes.
-		thisEffect initializePlayers: players initializeBoard: board. 
+		thisEffect initializePlayers: players initializeBoard: board.
 		thisEffect applyEffect: player.
-		lastEffect := thisEffect ]
+		(thisEffect isKindOf: NullEffect) ifFalse: [
+			lastEffect := thisEffect ] ]
 ]
 
 { #category : #action }
-Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer targetCard: aTargetCard [
+Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer target: aTarget [
 
-	(aPlayer = turnHolder or: (aCard canBeUsedConsidering: lastCard)) ifTrue: [
+	((aPlayer = turnHolder or: (aCard canBeUsedConsidering: lastCard))
+		 and: aPlayer isInGame) ifTrue: [
 		aPlayer useCard: (aCard
 				 withTargetPlayer: aTargetPlayer
-				 withTargetCard: aTargetCard
+				 withTargetCard: aTarget
 				 withLastEffect: lastEffect
 				 withLastCard: lastCard
 				 withBoard: board).
@@ -139,5 +141,5 @@ Game >> player: aPlayer throwsCard: aCard targetPlayer: aTargetPlayer targetCard
 { #category : #action }
 Game >> skipTurn: player [
 
-	turnHolder = player ifTrue: [ player ship resetFuelTank ]
+	(turnHolder = player) ifTrue: [ player ship resetFuelTank. turnHolder := nil.]
 ]

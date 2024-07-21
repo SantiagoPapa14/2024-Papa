@@ -27,20 +27,28 @@ Board >> boardSize [
 
 { #category : #action }
 Board >> canReach: aPlayer distance: aDistance [
-	| missingFuel |
-	(aPlayer ship consumeFuel: aDistance) ifFalse: [
-		(aPlayer getAlly isNil) ifTrue: [^false].
-		missingFuel := aDistance - aPlayer getAlly ship getFuel.
-		(aPlayer getAlly ship consumeFuel: missingFuel) ifFalse: [
-			self resetToStart: aPlayer getAlly.
-			aPlayer getAlly penalize: 2.
-			^ false ] ].
-	^ true
+	|missingFuel|
+	
+	missingFuel := aDistance - aPlayer ship getFuel.
+	(missingFuel > 0 and: aPlayer getAlly isNotNil) ifTrue:[
+		(aPlayer getAlly ship consumeFuel: missingFuel) ifFalse: [ 
+			 self resetToStart: aPlayer getAlly.
+			 aPlayer getAlly penalize: 2.
+			^false.
+			].
+		^true.
+		].
+	^(aPlayer ship consumeFuel: aDistance).
 ]
 
 { #category : #getsAndSets }
 Board >> getParsecs [
 	^parsecs.
+]
+
+{ #category : #getsAndSets }
+Board >> getSquare: aSquareIndex [
+	^squares at: aSquareIndex.
 ]
 
 { #category : #getsAndSets }
@@ -56,14 +64,14 @@ Board >> initializeRandomEffects: someDice [
 		probabilityScore := 100 atRandom.
 
 		probabilityScore <= 30 ifTrue: [
-			square initializeWithEffect: NullEffect new ].
+			square initializeWithEffect: NullEffect createEffect ].
 
 		probabilityScore > 30 ifTrue: [
-			square initializeWithEffect: (CardDealer new)
+			square initializeWithEffect: (CardDealer createEffect)
 			 ].
 
 		probabilityScore > 40 ifTrue: [
-			square initializeWithEffect: BlackHole new ].
+			square initializeWithEffect: BlackHole createEffect ].
 
 		probabilityScore > 60 ifTrue: [
 			| maxRoll |
@@ -85,7 +93,7 @@ Board >> initializeRandomEffects: someDice [
 				].
 
 		probabilityScore > 98 ifTrue: [
-			square initializeWithEffect: AtomicBomb new ] ]
+			square initializeWithEffect: AtomicBomb createEffect ] ]
 ]
 
 { #category : #initialization }
@@ -115,20 +123,16 @@ Board >> move: aPlayer distance: aDistance [
 
 	| shipPosition |
 	shipPosition := aPlayer ship getShipPosition.
-	(self canReach: aPlayer distance: aDistance )
+	(self canReach: aPlayer distance: aDistance)
 		ifTrue: [
-			(self takeOut: aPlayer).
+			self takeOut: aPlayer.
 			aPlayer ship setShipPosition: shipPosition + aDistance.
-			^(self place: aPlayer at: shipPosition + aDistance)
-			 ]
+			^ self place: aPlayer at: shipPosition + aDistance ]
 		ifFalse: [
-			
-			
-			 self resetToStart: aPlayer ship.
-					  aPlayer ship penalize: 2.
-					  ^NullEffect new.
-					 ].
-	
+			aPlayer ship explodeTurbine.
+			self resetToStart: aPlayer.
+			aPlayer penalize: 2.
+			^ NullEffect new ]
 ]
 
 { #category : #action }

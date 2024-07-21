@@ -69,10 +69,15 @@ Player >> initializeName: aName initializeShip: aShip [
 	ship := aShip.
 ]
 
+{ #category : #getsAndSets }
+Player >> isInGame [
+	^(ship turbinesLeft > 0)
+]
+
 { #category : #accessing }
 Player >> penalize: penalizationAmount [
 
-	penalization := penalization + penalizationAmount
+	penalization := penalization + penalizationAmount.
 ]
 
 { #category : #accessing }

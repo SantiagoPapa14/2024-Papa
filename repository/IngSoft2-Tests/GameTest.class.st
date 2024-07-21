@@ -15,12 +15,12 @@ GameTest >> test01ValidGameCanFinish [
 
 	| game aBoard someDice myPlayer |
 	someDice := OrderedCollection with: (LoadedDie of: 11).
-	aBoard := LoadedBoard clone: (Board
-			           withSize: 10
-			           withWorms: false
-			           withParsecs: 3
-			           withDice: someDice).
-	aBoard removeEffects.
+	aBoard := Board
+		          withSize: 10
+		          withWorms: false
+		          withParsecs: 3
+		          withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
 	game := Game
 		        withBoard: aBoard
 		        withDice: someDice
@@ -31,14 +31,19 @@ GameTest >> test01ValidGameCanFinish [
 	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	game playTurn: myPlayer.
 	game skipTurn: myPlayer.
+	game giveTurn: myPlayer.
 	self assert: game hasWinner equals: true
 ]
 
@@ -59,26 +64,69 @@ GameTest >> test02GameCanGetRankingAndOrdersShipsCorrectly [
 { #category : #tests }
 GameTest >> test03PlayerStartsGameWithSomeAmountOfCards [
 
-	| aPlayer someDice aLoadedBoard aGame|
+	| aPlayer someDice aBoard aGame |
 	someDice := OrderedCollection with: (LoadedDie of: 5).
-	aLoadedBoard := LoadedBoard clone: (Board
-			                 withSize: 20
-			                 withWorms: false
-			                 withParsecs: 1
-			                 withDice: someDice).
-	aLoadedBoard removeEffects.
+	aBoard := Board
+		          withSize: 20
+		          withWorms: false
+		          withParsecs: 1
+		          withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
 	aGame := Game
-		         withBoard: aLoadedBoard
+		         withBoard: aBoard
 		         withDice: someDice
 		         withPlayers: 2
 		         withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
-	self assert: aPlayer getCards size equals: 2.
-	
-	
-	
-	
-	
+	self assert: aPlayer getCards size equals: 2
+]
 
+{ #category : #tests }
+GameTest >> test04PlayerCantMoveWhenItsNotHisTurn [
 
+	| aPlayer bPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	aBoard := Board
+		          withSize: 20
+		          withWorms: false
+		          withParsecs: 1
+		          withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game
+		         withBoard: aBoard
+		         withDice: someDice
+		         withPlayers: 2
+		         withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard place: bPlayer at: 5.
+	aBoard place: aPlayer at: 5. 
+	aGame giveTurn: aPlayer.
+	aGame playTurn: bPlayer.
+	self assert: bPlayer ship getShipPosition equals: 5.
+]
+
+{ #category : #tests }
+GameTest >> test05PlayerCanOnlyWhenItsHisTurn [
+
+	| aPlayer bPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	aBoard := Board
+		          withSize: 20
+		          withWorms: false
+		          withParsecs: 1
+		          withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game
+		         withBoard: aBoard
+		         withDice: someDice
+		         withPlayers: 2
+		         withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard place: bPlayer at: 5.
+	aBoard place: aPlayer at: 5. 
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: aPlayer ship getShipPosition equals: 10.
 ]

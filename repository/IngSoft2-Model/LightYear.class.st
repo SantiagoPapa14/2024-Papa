@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 LightYear >> parseToSquares: aSize parsecAmount: anAmount [
 	^(1/3)*(distanceUnits * (aSize/anAmount)) truncated.
 ]

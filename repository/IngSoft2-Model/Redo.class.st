@@ -18,7 +18,7 @@ Redo >> applyCardEffect: cardUser [
 	lastCard isNil ifFalse: [
 		(lastCard
 			 withTargetPlayer: targetPlayer
-			 withTargetCard: targetCard
+			 withTargetCard: target
 			 withLastEffect: lastEffect
 			 withLastCard: lastCard
 			 withBoard: board) applyCardEffect: cardUser ]

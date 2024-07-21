@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 Parsec >> parseToSquares: aSize parsecAmount: anAmount [
 	^(distanceUnits * (aSize/anAmount )) truncated.
 ]
