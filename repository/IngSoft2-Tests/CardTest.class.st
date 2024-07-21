@@ -972,3 +972,28 @@ CardTest >> test36ReversedPolarityWormHoleTPsAllOtherShips [
 	aGame playTurn: aPlayer.
 	self assert: (bPlayer ship getShipPosition) equals: (wormPositions at: 2).
 ]
+
+{ #category : #tests }
+CardTest >> test37DeckCanReturnRandomCardHand [
+	|aDeck aHand|
+	aDeck := Deck getDeck.
+	aHand := Deck getRandomCards: 1.
+	self assert:( aDeck includes: (aHand at: 1)).
+	aHand := Deck getRandomCards: 3.
+	self assert:( aDeck includes: (aHand at: 1)).
+	self assert:( aDeck includes: (aHand at: 2)).
+	self assert:( aDeck includes: (aHand at: 3)).
+]
+
+{ #category : #tests }
+CardTest >> test38DeckKnowsAllCards [
+	|aDeck|
+	aDeck := Deck getDeck.
+	self assert: aDeck size equals: 6.
+	self assert: (aDeck includes: Cancellation).
+	self assert: (aDeck includes: Repeat).
+	self assert: (aDeck includes: Acceleration).
+	self assert: (aDeck includes: Ally).
+	self assert: (aDeck includes: Overload).
+	self assert: (aDeck includes: Redo).
+]

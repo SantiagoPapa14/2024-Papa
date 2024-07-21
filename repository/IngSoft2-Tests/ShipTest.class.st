@@ -167,3 +167,17 @@ ShipTest >> test11ShipsTurbineExplodesIfItDoesNotHaveEnoughFuelToMove [
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer ship turbinesLeft) equals: 1. 
 ]
+
+{ #category : #tests }
+ShipTest >> test12ShipCannotMoveWhenGravityLevelIsDifferentThanRollResult [
+	|aPlayer aBoard aGame|
+	aBoard :=Board withSize: 20 withWorms: false withParsecs: 1 withDice: (OrderedCollection with: (LoadedDie of: 3)).
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game withBoard: aBoard withDice: (OrderedCollection with: (LoadedDie of: 3)) withPlayers: 1  withMaxLaps: 1.
+	aPlayer := aGame getPlayers at: 1.
+	aBoard place: aPlayer at: 1.
+	aPlayer ship setGravity: 10.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 1. 
+]

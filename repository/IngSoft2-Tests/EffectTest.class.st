@@ -52,12 +52,13 @@ EffectTest >> test03AtomicBombDoesNotAffectLaps [
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
 	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
-	BoardUtility initializeEffect: (AtomicBomb new) initializeAt: 10 onBoard: aBoard.
+	BoardUtility initializeEffect: (AtomicBomb createEffect ) initializeAt: 10 onBoard: aBoard.
 
 	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
 	aBoard place: aPlayer at: 5.
 	aPlayer ship addLaps: 2.
+	aGame giveTurn: aPlayer.
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer ship getLaps) equals: 2. 
 	
@@ -241,7 +242,7 @@ EffectTest >> test12OnlyOneEffectIsAppliedPerTurn [
 	
 	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
 	BoardUtility initializeEffect: (MoonWalk withDistance: 1) initializeAt: 10 onBoard: aBoard.
-	BoardUtility initializeEffect: (AtomicBomb new) initializeAt: 4 onBoard: aBoard.
+	BoardUtility initializeEffect: (AtomicBomb createEffect ) initializeAt: 4 onBoard: aBoard.
 
 	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 2 withMaxLaps: 100.
 	aPlayer := aGame getPlayers at: 1.
@@ -479,5 +480,22 @@ EffectTest >> test23WormHolesTeleportShips [
 	aGame giveTurn: aPlayer.
 	aGame playTurn: aPlayer.
 	self assert: (aPlayer ship getShipPosition) equals: (worms at: 2)
+	
+]
+
+{ #category : #tests }
+EffectTest >> test24NullEffectDoesNothing [
+	|aPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility initializeEffect: (NullEffect createEffect) initializeAt: 10 onBoard: aBoard.
+
+	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	aBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 10. 
 	
 ]

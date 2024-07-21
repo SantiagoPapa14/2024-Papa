@@ -184,3 +184,62 @@ PlayerTest >> test09PlayerCantUsePermanentCardsWhenOutOfTurbines [
 	self assert: (aPlayer getActiveCards size) equals: 0. 
 	 
 ]
+
+{ #category : #tests }
+PlayerTest >> test10PlayerKeepsTrackOfPermanentCards [
+	| aPlayer bPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+
+	aBoard := Board
+			                 withSize: 20
+			                 withWorms: false
+			                 withParsecs: 1
+			                 withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game
+		         withBoard: aBoard
+		         withDice: someDice
+		         withPlayers: 2
+		         withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+
+	aBoard place: aPlayer at: 5.
+	aBoard place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Acceleration with: Overload with: Ally).
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: Ally targetPlayer: bPlayer target: nil.
+	aGame player: aPlayer throwsCard: Acceleration targetPlayer: (OrderedCollection with: aPlayer with: bPlayer) target: nil.
+	aGame player: aPlayer throwsCard: Overload targetPlayer: aPlayer target: nil.
+	self assert: (aPlayer getActiveCards size) equals: 3. 
+	self assert: (aPlayer getActiveCards includes: Acceleration).
+	self assert: (aPlayer getActiveCards includes: Ally).
+	self assert: (aPlayer getActiveCards includes: Overload).
+	 
+]
+
+{ #category : #tests }
+PlayerTest >> test11PlayerCantPlayTurnWhenPenalized [
+
+	| aPlayer bPlayer someDice aBoard aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	aBoard := Board
+		          withSize: 20
+		          withWorms: false
+		          withParsecs: 1
+		          withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aGame := Game
+		         withBoard: aBoard
+		         withDice: someDice
+		         withPlayers: 2
+		         withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard place: bPlayer at: 5.
+	aBoard place: aPlayer at: 5. 
+	aPlayer penalize: 2.
+	aGame giveTurn: aPlayer.
+	aGame playTurn: aPlayer.
+	self assert: aPlayer ship getShipPosition equals: 5.
+]

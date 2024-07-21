@@ -9,8 +9,14 @@ Class {
 
 { #category : #'as yet unclassified' }
 Deck class >> getDeck [
-	^(#(Cancellation Repeat Acceleration Ally Overload Redo) asOrderedCollection).
-	
+
+	^ OrderedCollection
+		  with: Cancellation
+		  with: Repeat
+		  with: Acceleration
+		  with: Ally
+		  with: Overload
+		  with: Redo
 ]
 
 { #category : #'as yet unclassified' }
