@@ -997,3 +997,23 @@ CardTest >> test38DeckKnowsAllCards [
 	self assert: (aDeck includes: Overload).
 	self assert: (aDeck includes: Redo).
 ]
+
+{ #category : #tests }
+CardTest >> test39CancellationRemovesPolarizationFromAnEffect [
+	|aPlayer someDice aBoard aGame|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	aBoard := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility initializeEffect: (AtomicBomb createEffect) initializeAt: 10 onBoard: aBoard.
+	aGame := Game withBoard: aBoard withDice: someDice withPlayers: 1 withMaxLaps: 100.
+	aPlayer := aGame getPlayers at: 1.
+	
+	
+	
+	aPlayer addCards: (OrderedCollection with: ReversePolarity with: Cancellation).
+	aBoard place: aPlayer at: 5.
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aBoard getSquare: 10). 
+	aGame player: aPlayer throwsCard: Cancellation targetPlayer: nil target: (aBoard getSquare: 10). 
+	aGame playTurn: aPlayer.
+	self assert: (aPlayer ship getShipPosition) equals: 1. 
+]

@@ -6,5 +6,8 @@ Class {
 
 { #category : #initialization }
 Cancellation >> applyCardEffect: cardUser [
-	targetPlayer deactivateCard: target.
+
+	targetPlayer isNotNil
+		ifTrue: [ targetPlayer deactivateCard: target ]
+		ifFalse: [ target getEffect initializePolarity ]
 ]
