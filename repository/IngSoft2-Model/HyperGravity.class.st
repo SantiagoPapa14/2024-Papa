@@ -22,7 +22,11 @@ HyperGravity class >> withNecessaryRolledResult: someResult [
 
 { #category : #application }
 HyperGravity >> applyEffect: affectedPlayer [
-(HyperGravity filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do:  [:aPlayer | affectedPlayer ship setGravity: necessaryRolledResult].
+	(HyperGravity
+		 filterPlayers: players
+		 withAffected: affectedPlayer
+		 withPolarization: reversed) do:  [:aPlayer |
+	 aPlayer ship setGravity: necessaryRolledResult].
 ]
 
 { #category : #initialization }

@@ -23,7 +23,7 @@ HyperJump class >> withUnits: aUnitList withBoard: aBoard [
 { #category : #application }
 HyperJump >> applyEffect: affectedPlayer [
 (HyperJump filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [ :aPlayer |
-		board move: affectedPlayer distance: self cycleDistance ]
+		board move: aPlayer distance: self cycleDistance ]
 ]
 
 { #category : #utility }

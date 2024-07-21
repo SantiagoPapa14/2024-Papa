@@ -462,7 +462,7 @@ CardTest >> test16BlackHoleIsReversedWhenReversePolarityCardGetsUsedOnIt [
 ]
 
 { #category : #tests }
-CardTest >> test17BlackHoleWorksNormallyWhenReversePolarityCardGetsUsedOnItTwice [
+CardTest >> test17EffectsWorkNormallyWhenReversePolarityCardGetsUsedOnThemTwice [
 	|aPlayer bPlayer someDice aBoard aGame anEffect|
 	someDice := OrderedCollection with: (LoadedDie of: 5).
 	
@@ -765,4 +765,210 @@ CardTest >> test27RepeatCardResetsShipsWhenLastEffectIsAtomicBomb [
 	self assert: (bPlayer ship getShipPosition) equals: 6.
 	aGame player: bPlayer throwsCard: Repeat targetPlayer: bPlayer  target: nil. 
 	self assert: (bPlayer ship getShipPosition) equals: 1.
+]
+
+{ #category : #tests }
+CardTest >> test28RepeatCardMovesOtherShipsBackWhenLastEffectIsMoonwalk [
+	|aPlayer bPlayer someDice aBoard  aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (MoonWalk withDistance: 1) initializeAt: 10  onBoard: aBoard. 
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	bPlayer addCards: (OrderedCollection with: Repeat).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	bPlayer ship resetFuelTank.
+	self assert: (aPlayer ship getShipPosition) equals: 4.
+	aGame player: bPlayer throwsCard: Repeat targetPlayer: aPlayer  target: nil. 
+	self assert: (bPlayer ship getShipPosition) equals: 9.
+]
+
+{ #category : #tests }
+CardTest >> test29RepeatCardGivesShipCardsWhenLastEffectIsCardDealer [
+	|aPlayer bPlayer someDice aBoard  aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (CardDealer createEffect) initializeAt: 10  onBoard: aBoard. 
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Repeat).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	self assert: (bPlayer getCards size) equals: 3.
+	aGame player: aPlayer throwsCard: Repeat targetPlayer: bPlayer  target: nil. 
+	self assert: (bPlayer getCards size) equals: 4.
+]
+
+{ #category : #tests }
+CardTest >> test30RepeatGravitatesPlayerWhenLastEffectIsHyperG [
+	|aPlayer bPlayer someDice aBoard  aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 1  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (HyperGravity withNecessaryRolledResult: 20) initializeAt: 10  onBoard: aBoard. 
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Repeat).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	aGame player: aPlayer throwsCard: Repeat targetPlayer: aPlayer  target: nil. 
+	self assert: (aPlayer ship getGravity) equals: 20.
+]
+
+{ #category : #tests }
+CardTest >> test31RepeatMovesShipForwardWhenLastEffectIsHyperJump [
+	|aPlayer bPlayer someDice aBoard  aGame |
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 5  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (HyperJump withUnits: (OrderedCollection with: (Parsec withUnits: 1)) withBoard: aBoard) initializeAt: 10  onBoard: aBoard. 
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	aPlayer addCards: (OrderedCollection with: Repeat).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	bPlayer ship resetFuelTank.
+	aGame player: aPlayer throwsCard: Repeat targetPlayer: aPlayer  target: nil. 
+	self assert: (bPlayer ship getShipPosition) equals: (aPlayer ship getShipPosition + 5).
+]
+
+{ #category : #tests }
+CardTest >> test32RepeatTPsShipWhenLastEffectIsWormHole [
+	|aPlayer bPlayer someDice aBoard  aGame wormPositions|
+	someDice := OrderedCollection with: (LoadedDie of: 3).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 5  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aBoard initializeWormSquares.
+	wormPositions := BoardUtility findWormSquares: aBoard.
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: (wormPositions at: 1) - 3.
+	aBoard  place: bPlayer at: (wormPositions at: 1) - 3.
+	aPlayer addCards: (OrderedCollection with: Repeat).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame playTurn: bPlayer.
+	bPlayer ship resetFuelTank.
+	aGame player: aPlayer throwsCard: Repeat targetPlayer: aPlayer  target: nil. 
+	self assert: (bPlayer ship getShipPosition) equals: (wormPositions at: 2).
+	self assert: (aPlayer ship getShipPosition) equals: (wormPositions at: 2).
+]
+
+{ #category : #tests }
+CardTest >> test33ReversePolarityMakesCardDealerGiveEveryoneElseCards [
+	|aPlayer bPlayer someDice aBoard  aGame|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 5  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (CardDealer createEffect) initializeAt: 10 onBoard: aBoard.
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	bPlayer addCards: (OrderedCollection with: ReversePolarity ).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame player: bPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aBoard getSquare: 10). 
+	aGame playTurn: bPlayer.
+	self assert: (aPlayer getCards size) equals: (3).
+]
+
+{ #category : #tests }
+CardTest >> test34ReversePolarityMakesHyperGravityAffectAllOtherShips [
+	|aPlayer bPlayer someDice aBoard  aGame|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 5  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (HyperGravity withNecessaryRolledResult: 10) initializeAt: 10 onBoard: aBoard.
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	bPlayer addCards: (OrderedCollection with: ReversePolarity ).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame player: bPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aBoard getSquare: 10). 
+	aGame playTurn: bPlayer.
+	self assert: (aPlayer ship getGravity) equals: (10).
+]
+
+{ #category : #tests }
+CardTest >> test35ReversePolarityMakesHyperJumpAffectAllOtherShips [
+	|aPlayer bPlayer someDice aBoard  aGame|
+	someDice := OrderedCollection with: (LoadedDie of: 5).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 5  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	BoardUtility initializeEffect: (HyperJump withUnits: (OrderedCollection with: (Parsec withUnits: 1)) withBoard: aBoard) initializeAt: 10  onBoard: aBoard. 
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: 5.
+	aBoard  place: bPlayer at: 5.
+	bPlayer addCards: (OrderedCollection with: ReversePolarity ).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: bPlayer.
+	aGame player: bPlayer throwsCard: ReversePolarity targetPlayer: nil target: (aBoard getSquare: 10). 
+	aGame playTurn: bPlayer.
+	self deny: (aPlayer ship getShipPosition) equals: (5).
+]
+
+{ #category : #tests }
+CardTest >> test36ReversedPolarityWormHoleTPsAllOtherShips [
+	|aPlayer bPlayer someDice aBoard  aGame wormPositions|
+	someDice := OrderedCollection with: (LoadedDie of: 3).
+	
+	aBoard  := Board withSize: 20 withWorms: false  withParsecs: 5  withDice: someDice.
+	BoardUtility removeEffectsOnBoard: aBoard.
+	aBoard initializeWormSquares.
+	wormPositions := BoardUtility findWormSquares: aBoard.
+	aGame := Game withBoard: aBoard  withDice: someDice withPlayers: 2 withMaxLaps: 100.
+	
+	aPlayer := aGame getPlayers at: 1.
+	bPlayer := aGame getPlayers at: 2.
+	aBoard  place: aPlayer at: (wormPositions at: 1) - 3.
+	aBoard  place: bPlayer at: (wormPositions at: 1) - 3.
+	aPlayer addCards: (OrderedCollection with: ReversePolarity).
+	'--------------------------------------------------------------------------'.
+	aGame giveTurn: aPlayer.
+	aGame player: aPlayer throwsCard: ReversePolarity targetPlayer: nil  target: (aBoard getSquare: (wormPositions at: 1)). 
+	aGame playTurn: aPlayer.
+	self assert: (bPlayer ship getShipPosition) equals: (wormPositions at: 2).
 ]

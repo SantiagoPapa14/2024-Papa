@@ -17,5 +17,9 @@ reversedPolarization ifTrue:[
 
 { #category : #application }
 CardDealer >> applyEffect: affectedPlayer [
-(CardDealer filterPlayers: players withAffected: affectedPlayer withPolarization: reversed ) do: [:aPlayer | aPlayer addCards: (Deck getRandomCards: 1)].
+	(CardDealer
+		 filterPlayers: players
+		 withAffected: affectedPlayer
+		 withPolarization: reversed) do:
+		 [:aPlayer |	aPlayer addCards: (Deck getRandomCards: 1)].
 ]
